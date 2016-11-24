@@ -36,6 +36,7 @@ public class Main extends JFrame{
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getSource().equals(btnTeller)) {
 				TellerFrame tf = new TellerFrame();
+				setVisible(false);
 			}
 		}
 	}
