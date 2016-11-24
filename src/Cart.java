@@ -20,4 +20,10 @@ public class Cart {
 		return total;
 	}
 	
+	public String generateReceipt() {
+		StringBuilder sb = new StringBuilder();
+		
+		return sb.toString();
+	}
+	
 }
