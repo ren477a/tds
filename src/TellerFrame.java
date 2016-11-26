@@ -3,6 +3,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 public class TellerFrame extends JFrame {
 		private JList<String> listTickets, listCart;
@@ -10,6 +11,7 @@ public class TellerFrame extends JFrame {
 		private JLabel lblSelTickets, lblCart;
 		private JButton btnNewT, btnAdd, btnRemove;
 		private Database db;
+		private  JTable tblTickets;
 		ButtonListener btnL;
 		
 		Cart cart;
@@ -19,17 +21,25 @@ public class TellerFrame extends JFrame {
 			db = new Database();
 			btnL = new ButtonListener();
 			mdlTickets = new DefaultListModel<String>();
-			db.loadTicketsData(mdlTickets);
-			listTickets = new JList<String>(mdlTickets);
-			if(!mdlTickets.isEmpty()) listTickets.setSelectedIndex(0);
-			listTickets.setLayoutOrientation(JList.VERTICAL);
-			listTickets.setVisibleRowCount(3);
+//			db.loadTicketsData(mdlTickets);
+//			listTickets = new JList<String>(mdlTickets);
+//			if(!mdlTickets.isEmpty()) listTickets.setSelectedIndex(0);
+//			listTickets.setLayoutOrientation(JList.VERTICAL);
+//			listTickets.setVisibleRowCount(3);
+			String[] tblTklCols = {"ID", "Type", "Event", "Price", "Available"};
+			tblTickets = db.createTable("SELECT tickets.ticket_id AS ID, tickets.ticket_type AS TYPE, events.event_name AS EVENT, "
+					+ "tickets.ticket_price AS PRICE, tickets.ticket_stock AS AVAILABLE "
+					+"FROM tickets " 
+					+"INNER JOIN events " 
+					+"ON tickets.event_id=events.event_id "
+					+"ORDER BY tickets.event_id, tickets.ticket_price DESC",tblTklCols);
+			tblTickets.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			mdlCart = new DefaultListModel<String>();
 			listCart = new JList<String>(mdlCart);
 			listCart.setLayoutOrientation(JList.VERTICAL);
 			listCart.setVisibleRowCount(3);
 			JScrollPane scrCart = new JScrollPane(listCart);
-			JScrollPane scrTickets = new JScrollPane(listTickets);
+			JScrollPane scrTickets = new JScrollPane(tblTickets);
 			lblSelTickets = new JLabel("Select Tickets:");
 			lblCart = new JLabel("Cart:");
 
@@ -48,14 +58,6 @@ public class TellerFrame extends JFrame {
 			pnlTeller.add(scrCart);
 			pnlTeller.add(btnRemove);
 			
-			JTable table = db.createTable("SELECT tickets.ticket_id, tickets.ticket_type, tickets.event_id, events.event_name, "
-					+ "tickets.ticket_price, tickets.ticket_stock "
-					+"FROM tickets " 
-					+"INNER JOIN events " 
-					+"ON tickets.event_id=events.event_id "
-					+"ORDER BY tickets.event_id, tickets.ticket_price DESC");
-			pnlTeller.add(table);
-			
 			add(pnlTeller);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setTitle("Ticket Master");
@@ -68,11 +70,19 @@ public class TellerFrame extends JFrame {
 		private class ButtonListener implements ActionListener {
 			public void actionPerformed(ActionEvent ae) {
 				if(ae.getSource().equals(btnAdd)) {
-					int qty = Integer.parseInt(JOptionPane.showInputDialog("Enter quantity:"));
-					String selected = listTickets.getSelectedValue().toString();
-					int id = Integer.parseInt(selected.substring(0, selected.indexOf(" ")));
-					cart.addToCart(new Ticket(id), qty);
-					System.out.println(cart.generateReceipt());
+					System.out.println(tblTickets.getSelectedRow());
+					if(tblTickets.getSelectedRow()!=-1) {
+						int qty = Integer.parseInt(JOptionPane.showInputDialog("Enter quantity:"));
+						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
+						cart.addToCart(new Ticket(id), qty);
+						mdlCart.addElement(cart.getLastDisplaySummary());
+					} 
+				} else if(ae.getSource().equals(btnRemove)) {
+					String selected = listCart.getSelectedValue();
+					if(selected!=null) {
+						mdlCart.remove(listCart.getSelectedIndex());
+						cart.removeItem(selected);
+					}
 					
 				}
 			}

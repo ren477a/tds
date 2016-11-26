@@ -13,7 +13,6 @@ public class Ticket {
 		this.price = db.getTicketPrice(id);
 		this.eventCode = db.getEventCode(id);
 		this.type = db.getTicketType(id);
-		printTicketInfo();
 	}
 	
 	public int getId() {
@@ -31,9 +30,8 @@ public class Ticket {
 		return type;
 	}
 	
-	public void printTicketInfo() {
-		System.out.println(id + " : " + type + " : " + eventCode + " : " + price);
-		
-		
+	public String getTicketInfo() {
+		System.out.println();
+		return " : " + type + " : " + eventCode + " : " + price;
 	}
 }
