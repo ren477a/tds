@@ -1,6 +1,9 @@
 import java.sql.*;
+import java.util.Vector;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Database {
 	private Connection conn;
@@ -59,7 +62,8 @@ public class Database {
 	public void loadTicketsData(DefaultListModel<String> mdlTickets) {
 		mdlTickets.removeAllElements();
 		try {
-			rs = stmt.executeQuery("SELECT tickets.ticket_id, tickets.ticket_type, tickets.event_id, events.event_name, tickets.ticket_price "
+			rs = stmt.executeQuery("SELECT tickets.ticket_id, tickets.ticket_type, tickets.event_id, events.event_name, "
+									+ "tickets.ticket_price, tickets.ticket_stock "
 									+"FROM tickets " 
 									+"INNER JOIN events " 
 									+"ON tickets.event_id=events.event_id "
@@ -69,14 +73,56 @@ public class Database {
 				String name = rs.getString("events.event_name");
 				double price = rs.getDouble("tickets.ticket_price");
 				String type = rs.getString("tickets.ticket_type");
-				System.out.println(ticketId + " " + name + " " + type + " " + price);
-				String element = ticketId + " " + name + " " + type + " " + price;
+				int stock = rs.getInt("ticket_stock");
+				String available = Integer.toString(stock);
+				if(stock==0)
+					available = "SOLD OUT";
+				String element = ticketId + " " + name + " " + type + " " + price + " :: Available: " + available;
 				mdlTickets.addElement(element);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	//resultset to table
+	public JTable createTable(String query) {
+		JTable table = null;
+		try {
+			rs = stmt.executeQuery(query);
+			table = new JTable(buildTableModel(rs));
+			return table;
+		} catch (SQLException e) {
+			return table;
+		}
+	}
+	
+	private static DefaultTableModel buildTableModel(ResultSet rs)
+	        throws SQLException {
+
+	    ResultSetMetaData metaData = rs.getMetaData();
+
+	    // names of columns
+	    Vector<String> columnNames = new Vector<String>();
+	    int columnCount = metaData.getColumnCount();
+	    for (int column = 1; column <= columnCount; column++) {
+	        columnNames.add(metaData.getColumnName(column));
+	    }
+
+	    // data of the table
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    while (rs.next()) {
+	        Vector<Object> vector = new Vector<Object>();
+	        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+	            vector.add(rs.getObject(columnIndex));
+	        }
+	        data.add(vector);
+	    }
+
+	    return new DefaultTableModel(data, columnNames);
+
 	}
 
 }

@@ -37,6 +37,8 @@ public class Main extends JFrame{
 			if(ae.getSource().equals(btnTeller)) {
 				TellerFrame tf = new TellerFrame();
 				setVisible(false);
+			} else if(ae.getSource().equals(btnAdmin)) {
+				
 			}
 		}
 	}

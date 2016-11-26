@@ -27,6 +27,9 @@ public class Ticket {
 	public String getEventCode() {
 		return eventCode;
 	}
+	public String getType() {
+		return type;
+	}
 	
 	public void printTicketInfo() {
 		System.out.println(id + " : " + type + " : " + eventCode + " : " + price);

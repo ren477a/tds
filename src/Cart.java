@@ -25,7 +25,17 @@ public class Cart {
 	
 	public String generateReceipt() {
 		StringBuilder sb = new StringBuilder();
-		
+		sb.append("RECEIPT:\n");
+		for(int i = 0; i < tickets.size(); i++) {
+			sb.append(quantity.get(i));
+			sb.append(" : ");
+			sb.append(tickets.get(i).getType());
+			sb.append(" : ");
+			sb.append(tickets.get(i).getEventCode());
+			sb.append(" :\t");
+			sb.append(tickets.get(i).getPrice());
+			sb.append("\n");
+		}
 		return sb.toString();
 	}
 	

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TellerFrame extends JFrame {
-		private JList listTickets, listCart;
+		private JList<String> listTickets, listCart;
 		private DefaultListModel<String> mdlTickets, mdlCart;
 		private JLabel lblSelTickets, lblCart;
 		private JButton btnNewT, btnAdd, btnRemove;
@@ -20,12 +20,12 @@ public class TellerFrame extends JFrame {
 			btnL = new ButtonListener();
 			mdlTickets = new DefaultListModel<String>();
 			db.loadTicketsData(mdlTickets);
-			listTickets = new JList(mdlTickets);
+			listTickets = new JList<String>(mdlTickets);
 			if(!mdlTickets.isEmpty()) listTickets.setSelectedIndex(0);
 			listTickets.setLayoutOrientation(JList.VERTICAL);
 			listTickets.setVisibleRowCount(3);
 			mdlCart = new DefaultListModel<String>();
-			listCart = new JList(mdlCart);
+			listCart = new JList<String>(mdlCart);
 			listCart.setLayoutOrientation(JList.VERTICAL);
 			listCart.setVisibleRowCount(3);
 			JScrollPane scrCart = new JScrollPane(listCart);
@@ -48,10 +48,18 @@ public class TellerFrame extends JFrame {
 			pnlTeller.add(scrCart);
 			pnlTeller.add(btnRemove);
 			
+			JTable table = db.createTable("SELECT tickets.ticket_id, tickets.ticket_type, tickets.event_id, events.event_name, "
+					+ "tickets.ticket_price, tickets.ticket_stock "
+					+"FROM tickets " 
+					+"INNER JOIN events " 
+					+"ON tickets.event_id=events.event_id "
+					+"ORDER BY tickets.event_id, tickets.ticket_price DESC");
+			pnlTeller.add(table);
+			
 			add(pnlTeller);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
-			setTitle("Loan Management");
-			setSize(400, 400);
+			setTitle("Ticket Master");
+			setSize(600, 600);
 			setLocationRelativeTo(null);
 			setVisible(true);
 			
@@ -64,6 +72,8 @@ public class TellerFrame extends JFrame {
 					String selected = listTickets.getSelectedValue().toString();
 					int id = Integer.parseInt(selected.substring(0, selected.indexOf(" ")));
 					cart.addToCart(new Ticket(id), qty);
+					System.out.println(cart.generateReceipt());
+					
 				}
 			}
 		}
