@@ -8,11 +8,12 @@ import java.util.Vector;
 public class TellerFrame extends JFrame {
 		private JList<String> listTickets, listCart;
 		private DefaultListModel<String> mdlTickets, mdlCart;
-		private JLabel lblSelTickets, lblCart;
-		private JButton btnNewT, btnAdd, btnRemove;
+		private JLabel lblSelTickets, lblCart, lblT, lblTotal, lblCashPay;
+		private JTextField tfCash;
+		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit;
 		private Database db;
 		private  JTable tblTickets;
-		ButtonListener btnL;
+		private ButtonListener btnL;
 		
 		Cart cart;
 		
@@ -42,11 +43,20 @@ public class TellerFrame extends JFrame {
 			JScrollPane scrTickets = new JScrollPane(tblTickets);
 			lblSelTickets = new JLabel("Select Tickets:");
 			lblCart = new JLabel("Cart:");
+			lblT = new JLabel("Total:");
+			lblTotal = new JLabel("0");
+			lblCashPay = new JLabel("Cash Payment:");
 
+			tfCash = new JTextField();
+			
 			btnAdd = new JButton("Add to Cart");
 			btnAdd.addActionListener(btnL);
+			btnViewMore = new JButton("More Details");
+			btnViewMore.addActionListener(btnL);
 			btnRemove = new JButton("Remove from Cart");
 			btnRemove.addActionListener(btnL);
+			btnSubmit = new JButton("Submit");
+			btnSubmit.addActionListener(btnL);
 			
 			JPanel pnlTeller = new JPanel();
 			pnlTeller.setLayout(new BoxLayout(pnlTeller, BoxLayout.PAGE_AXIS));
@@ -54,9 +64,15 @@ public class TellerFrame extends JFrame {
 			pnlTeller.add(lblSelTickets);
 			pnlTeller.add(scrTickets);
 			pnlTeller.add(btnAdd);
+			pnlTeller.add(btnViewMore);
 			pnlTeller.add(lblCart);
 			pnlTeller.add(scrCart);
+			pnlTeller.add(lblT);
+			pnlTeller.add(lblTotal);
+			pnlTeller.add(lblCashPay);
+			pnlTeller.add(tfCash);
 			pnlTeller.add(btnRemove);
+			pnlTeller.add(btnSubmit);
 			
 			add(pnlTeller);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -70,7 +86,6 @@ public class TellerFrame extends JFrame {
 		private class ButtonListener implements ActionListener {
 			public void actionPerformed(ActionEvent ae) {
 				if(ae.getSource().equals(btnAdd)) {
-					System.out.println(tblTickets.getSelectedRow());
 					if(tblTickets.getSelectedRow()!=-1) {
 						int qty = Integer.parseInt(JOptionPane.showInputDialog("Enter quantity:"));
 						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
@@ -83,6 +98,13 @@ public class TellerFrame extends JFrame {
 						mdlCart.remove(listCart.getSelectedIndex());
 						cart.removeItem(selected);
 					}
+					
+				} else if(ae.getSource().equals(btnViewMore)) {
+					if(tblTickets.getSelectedRow()!=-1) {
+						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
+						JOptionPane.showMessageDialog(null, "message", "Details", JOptionPane.OK_OPTION);
+					} 
+				} else if(ae.getSource().equals(btnSubmit)) {
 					
 				}
 			}

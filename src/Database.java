@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -63,32 +64,6 @@ public class Database {
 		}
 	}
 	
-//	public void loadTicketsData(DefaultListModel<String> mdlTickets) {
-//		mdlTickets.removeAllElements();
-//		try {
-//			rs = stmt.executeQuery("SELECT tickets.ticket_id, tickets.ticket_type, tickets.event_id, events.event_name, "
-//									+ "tickets.ticket_price, tickets.ticket_stock "
-//									+"FROM tickets " 
-//									+"INNER JOIN events " 
-//									+"ON tickets.event_id=events.event_id "
-//									+"ORDER BY tickets.event_id, tickets.ticket_price DESC");
-//			while(rs.next()){
-//				int ticketId = rs.getInt("tickets.ticket_id");
-//				String name = rs.getString("events.event_name");
-//				double price = rs.getDouble("tickets.ticket_price");
-//				String type = rs.getString("tickets.ticket_type");
-//				int stock = rs.getInt("ticket_stock");
-//				String available = Integer.toString(stock);
-//				if(stock==0)
-//					available = "SOLD OUT";
-//				String element = ticketId + " " + name + " " + type + " " + price + " :: Available: " + available;
-//				mdlTickets.addElement(element);
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 	
 	
 	//resultset to table
@@ -106,6 +81,7 @@ public class Database {
 			           return component;
 			        }
 			    };
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);;
 			return table;
 		} catch (SQLException e) {
