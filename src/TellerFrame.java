@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -39,6 +40,7 @@ public class TellerFrame extends JFrame {
 			
 			JPanel pnlTeller = new JPanel();
 			pnlTeller.setLayout(new BoxLayout(pnlTeller, BoxLayout.PAGE_AXIS));
+			pnlTeller.setBorder(new EmptyBorder(20,20,20,20));
 			pnlTeller.add(lblSelTickets);
 			pnlTeller.add(scrTickets);
 			pnlTeller.add(btnAdd);

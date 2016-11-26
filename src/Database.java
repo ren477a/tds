@@ -25,11 +25,34 @@ public class Database {
 	
 	public double getTicketPrice(int ticket_id) {
 		try {
-			rs = stmt.executeQuery("SELECT * FROM tickets WHERE ticket_id="+ticket_id);
+			rs = stmt.executeQuery("SELECT ticket_price FROM tickets WHERE ticket_id="+ticket_id);
 			rs.next();
 			return rs.getDouble("ticket_price");
 		} catch (SQLException e) {
 			return 0.0;
+		}
+	}
+	
+	public String getTicketType(int ticket_id) {
+		try {
+			rs = stmt.executeQuery("SELECT ticket_type FROM tickets WHERE ticket_id="+ticket_id);
+			rs.next();
+			return rs.getString("ticket_type");
+		} catch (SQLException e) {
+			return "ERR";
+		}
+	}
+	
+	public String getEventCode(int ticket_id) {
+		try {
+			rs = stmt.executeQuery("SELECT * FROM tickets WHERE ticket_id="+ticket_id);
+			rs.next();
+			int event_id = rs.getInt("event_id");
+			rs = stmt.executeQuery("SELECT code FROM events WHERE event_id="+event_id);
+			rs.next();
+			return rs.getString("code");
+		} catch (SQLException e) {
+			return "ERR";
 		}
 	}
 	

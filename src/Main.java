@@ -44,7 +44,7 @@ public class Main extends JFrame{
 	public static void createShowGUI() {
 		Main app = new Main();
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		app.setTitle("Loan Management");
+		app.setTitle("Ticket Master");
 		app.setSize(400, 400);
 		app.setLocationRelativeTo(null);
 		app.setVisible(true);
