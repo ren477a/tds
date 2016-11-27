@@ -130,7 +130,8 @@ public class TellerFrame extends JFrame {
 				} else if(ae.getSource().equals(btnViewMore)) {
 					if(tblTickets.getSelectedRow()!=-1) {
 						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
-						JOptionPane.showMessageDialog(null, "message", "Details", JOptionPane.OK_OPTION);
+						String details = db.getTicketInfo(id);
+						JOptionPane.showMessageDialog(null, details, "More Info", JOptionPane.PLAIN_MESSAGE);
 					} 
 				} else if(ae.getSource().equals(btnSubmit)) {
 					try {

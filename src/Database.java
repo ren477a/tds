@@ -64,6 +64,43 @@ public class Database {
 		}
 	}
 	
+	public String getTicketInfo(int tkt_id) {
+		//name of event
+		//type of ticket
+		//date of event
+		//time of event
+		//venue
+		//description
+		try {
+			rs = stmt.executeQuery("SELECT event_id, ticket_type FROM tickets WHERE ticket_id="+tkt_id);
+			rs.next();
+			int eventID = rs.getInt("event_id");
+			String type = rs.getString("ticket_type");
+			rs = stmt.executeQuery("SELECT * FROM events WHERE event_id="+eventID);
+			rs.next();
+			StringBuilder sb = new StringBuilder();
+			sb.append("Event: \n");
+			sb.append(rs.getString("event_name"));
+			sb.append("\n\nTicket Type: \n");
+			sb.append(type);
+			sb.append("\n\nVenue: \n");
+			sb.append(rs.getString("venue"));
+			sb.append("\n\nDate: \n");
+			sb.append(rs.getDate("event_date").toString());
+			sb.append("\n\nTime: \n");
+			sb.append(rs.getTime("event_time").toString());
+			if(rs.getString("event_description")!=null) {
+				sb.append("\n\nDescription: \n");
+				sb.append(rs.getString("event_description"));
+			}
+			
+			return sb.toString();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void recordTransaction(int trn_id, int tkt_id, int qty, double price, double cash) {
 		try {
 			stmt.executeUpdate("UPDATE tickets "
