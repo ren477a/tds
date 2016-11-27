@@ -39,6 +39,9 @@ public class Cart {
 		return total;
 	}
 	
+		
+	
+	
 	public boolean isEmpty() {
 		if(tickets.size()>0)
 			return false;
@@ -72,4 +75,11 @@ public class Cart {
 		return sb.toString();
 	}
 	
+	public void submitPurchase(Database db, double cash) {
+		int id = db.getLatestTransacID() + 1;
+		System.out.println(id);
+		for(int i = 0; i < tickets.size(); i++) {
+			db.recordTransaction(id, tickets.get(i).getId(), quantity.get(i), total, cash);
+		}
+	}
 }

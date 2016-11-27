@@ -1,6 +1,7 @@
 import java.awt.Component;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
@@ -51,6 +52,37 @@ public class Database {
 		}
 	}
 	
+	public int getLatestTransacID() {
+		try {
+			rs = stmt.executeQuery("SELECT MAX(transac_id) FROM transactions");
+			rs.next();
+			int maxID = rs.getInt("MAX(transac_id)");
+			return maxID;
+		} catch (SQLException e) {
+			System.out.println("error");
+			return -1;
+		}
+	}
+	
+	public void recordTransaction(int trn_id, int tkt_id, int qty, double price, double cash) {
+		try {
+			stmt.executeUpdate("UPDATE tickets "
+					+ "SET ticket_stock=ticket_stock-" + qty
+					+ " WHERE ticket_id=" + tkt_id);
+			
+			stmt.executeUpdate("INSERT INTO transactions "
+					+ "VALUES(null, " + trn_id
+					+ ", DEFAULT, " + tkt_id
+					+ ", " + qty
+					+ ", " + price
+					+ ", " + cash
+					+ ", " + (cash-price) + ")");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public String getEventCode(int ticket_id) {
 		try {
 			rs = stmt.executeQuery("SELECT * FROM tickets WHERE ticket_id="+ticket_id);
@@ -61,6 +93,14 @@ public class Database {
 			return rs.getString("code");
 		} catch (SQLException e) {
 			return "ERR";
+		}
+	}
+	
+	public void refreshTable(JTable table, String query, String[] cols) {
+		try {
+			table.setModel(buildTableModel(stmt.executeQuery(query), cols));
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -94,14 +134,8 @@ public class Database {
 
 	    ResultSetMetaData metaData = rs.getMetaData();
 
-	    // names of columns
 	    Vector<String> columnNames = new Vector<String>(Arrays.asList(columns));
 	    int columnCount = metaData.getColumnCount();
-//	    for (int column = 1; column <= columnCount; column++) {
-//	        columnNames.add(metaData.getColumnName(column));
-//	    }
-
-	    // data of the table
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 	    while (rs.next()) {
 	        Vector<Object> vector = new Vector<Object>();

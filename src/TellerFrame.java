@@ -12,23 +12,24 @@ public class TellerFrame extends JFrame {
 		private JTextField tfCash;
 		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit;
 		private Database db;
-		private  JTable tblTickets;
+		private JTable tblTickets;
+		private final String[] tblTktCols = {"ID", "Type", "Event", "Available", "Price"};;
+		private final String tblTktsQuery = "SELECT tickets.ticket_id AS ID, tickets.ticket_type AS TYPE, events.event_name AS EVENT, "
+				+ "tickets.ticket_stock AS AVAILABLE, tickets.ticket_price AS PRICE "
+				+"FROM tickets " 
+				+"INNER JOIN events " 
+				+"ON tickets.event_id=events.event_id "
+				+"ORDER BY tickets.event_id, tickets.ticket_price DESC";;
 		private ButtonListener btnL;
 		
-		Cart cart;
+		private Cart cart;
 		
 		public TellerFrame() {
 			cart = new Cart();
 			db = new Database();
 			btnL = new ButtonListener();
 			mdlTickets = new DefaultListModel<String>();
-			String[] tblTklCols = {"ID", "Type", "Event", "Available", "Price"};
-			tblTickets = db.createTable("SELECT tickets.ticket_id AS ID, tickets.ticket_type AS TYPE, events.event_name AS EVENT, "
-					+ "tickets.ticket_stock AS AVAILABLE, tickets.ticket_price AS PRICE "
-					+"FROM tickets " 
-					+"INNER JOIN events " 
-					+"ON tickets.event_id=events.event_id "
-					+"ORDER BY tickets.event_id, tickets.ticket_price DESC",tblTklCols);
+			tblTickets = db.createTable(tblTktsQuery ,tblTktCols);
 			tblTickets.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			mdlCart = new DefaultListModel<String>();
 			listCart = new JList<String>(mdlCart);
@@ -115,7 +116,11 @@ public class TellerFrame extends JFrame {
 						if(cash < cart.getTotal())
 							JOptionPane.showMessageDialog(null, "Insufficient payment!");
 						else {
+							cart.submitPurchase(db, cash);
+							
 							JOptionPane.showMessageDialog(null, cart.generateReceipt(cash), "Transaction Completed", JOptionPane.PLAIN_MESSAGE);
+							db.refreshTable(tblTickets, tblTktsQuery, tblTktCols);
+							
 						}
 					} catch (NumberFormatException e) {
 						
