@@ -3,11 +3,10 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
 
 public class TellerFrame extends JFrame {
-		private JList<String> listTickets, listCart;
-		private DefaultListModel<String> mdlTickets, mdlCart;
+		private JList<String> listCart;
+		private DefaultListModel<String> mdlCart;
 		private JLabel lblSelTickets, lblCart, lblT, lblTotal, lblCashPay;
 		private JTextField tfCash;
 		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit;
@@ -28,7 +27,6 @@ public class TellerFrame extends JFrame {
 			cart = new Cart();
 			db = new Database();
 			btnL = new ButtonListener();
-			mdlTickets = new DefaultListModel<String>();
 			tblTickets = db.createTable(tblTktsQuery ,tblTktCols);
 			tblTickets.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			tblTickets.setAlignmentX(Component.LEFT_ALIGNMENT);
