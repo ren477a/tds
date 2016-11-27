@@ -5,6 +5,7 @@ public class Cart {
 	private ArrayList<Ticket> tickets;
 	private ArrayList<Integer> quantity;
 	private ArrayList<String> summary;
+	private double total;
 	
 	public Cart() {
 		 tickets = new ArrayList<Ticket>();
@@ -16,6 +17,7 @@ public class Cart {
 		tickets.add(t);
 		quantity.add(qty);
 		summary.add(qty + t.getTicketInfo());
+		total += t.getPrice() * qty;
 	}
 	
 	public boolean removeItem(String item) {
@@ -23,21 +25,27 @@ public class Cart {
 		if(index==-1)
 			return false;
 		else {
+			total -= tickets.get(index).getPrice()*quantity.get(index);
 			tickets.remove(index);
 			quantity.remove(index);
 			summary.remove(index);
+			
 			return true;
 		}
 			
 	}
 	
-	public double getTotalPrice() {
-		double total = 0;
-		for(int i = 0; i < tickets.size(); i++) {
-			total += (tickets.get(i).getPrice()*quantity.get(i));
-		}
+	public double getTotal() {
 		return total;
 	}
+	
+	public boolean isEmpty() {
+		if(tickets.size()>0)
+			return false;
+		else
+			return true;
+	}
+	
 	
 	public String getLastDisplaySummary() {
 		return summary.get(summary.size()-1);

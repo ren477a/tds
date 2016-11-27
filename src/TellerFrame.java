@@ -22,11 +22,6 @@ public class TellerFrame extends JFrame {
 			db = new Database();
 			btnL = new ButtonListener();
 			mdlTickets = new DefaultListModel<String>();
-//			db.loadTicketsData(mdlTickets);
-//			listTickets = new JList<String>(mdlTickets);
-//			if(!mdlTickets.isEmpty()) listTickets.setSelectedIndex(0);
-//			listTickets.setLayoutOrientation(JList.VERTICAL);
-//			listTickets.setVisibleRowCount(3);
 			String[] tblTklCols = {"ID", "Type", "Event", "Price", "Available"};
 			tblTickets = db.createTable("SELECT tickets.ticket_id AS ID, tickets.ticket_type AS TYPE, events.event_name AS EVENT, "
 					+ "tickets.ticket_price AS PRICE, tickets.ticket_stock AS AVAILABLE "
@@ -57,6 +52,7 @@ public class TellerFrame extends JFrame {
 			btnRemove.addActionListener(btnL);
 			btnSubmit = new JButton("Submit");
 			btnSubmit.addActionListener(btnL);
+			btnSubmit.setEnabled(false);
 			
 			JPanel pnlTeller = new JPanel();
 			pnlTeller.setLayout(new BoxLayout(pnlTeller, BoxLayout.PAGE_AXIS));
@@ -91,12 +87,17 @@ public class TellerFrame extends JFrame {
 						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
 						cart.addToCart(new Ticket(id), qty);
 						mdlCart.addElement(cart.getLastDisplaySummary());
+						lblTotal.setText(Double.toString(cart.getTotal()));
+						btnSubmit.setEnabled(true);
 					} 
 				} else if(ae.getSource().equals(btnRemove)) {
 					String selected = listCart.getSelectedValue();
 					if(selected!=null) {
 						mdlCart.remove(listCart.getSelectedIndex());
 						cart.removeItem(selected);
+						lblTotal.setText(Double.toString(cart.getTotal()));
+						if(cart.isEmpty())
+							btnSubmit.setEnabled(false);
 					}
 					
 				} else if(ae.getSource().equals(btnViewMore)) {
@@ -105,7 +106,16 @@ public class TellerFrame extends JFrame {
 						JOptionPane.showMessageDialog(null, "message", "Details", JOptionPane.OK_OPTION);
 					} 
 				} else if(ae.getSource().equals(btnSubmit)) {
-					
+					try {
+						double cash = Double.parseDouble(tfCash.getText());
+						if(cash < cart.getTotal())
+							JOptionPane.showMessageDialog(null, "Insufficient payment!");
+						else {
+							System.out.println(cash);
+						}
+					} catch (NumberFormatException e) {
+						
+					}
 				}
 			}
 		}
