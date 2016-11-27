@@ -10,10 +10,20 @@ public class NewEntry extends JFrame {
 	private JTextField[] tf;
 	private JButton btnSubmit, btnCancel;
 	private ButtonListener btnL;
+	private JFrame parent;
+	private String table;
 	
 	public NewEntry(String[] lblNames, JFrame parent) {
+		if(lblNames[0].equals("Event ID"))
+			table = "events";
+		else if(lblNames[0].equals("Ticket ID"))
+			table = "tickets";
+		else if(lblNames[0].equals("ID"))
+			table = "transactions";
 		
 		
+		this.parent = parent;
+		this.parent.setEnabled(false);
 		tf = new JTextField[lblNames.length];
 		JPanel pnl = new JPanel();
 		pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
@@ -25,6 +35,7 @@ public class NewEntry extends JFrame {
 			pnl.add(tf[i]);
 			pnl.add(Box.createRigidArea(new Dimension(0, 10)));
 		}
+		tf[0].setEditable(false);
 		btnL = new ButtonListener();
 		btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(btnL);
@@ -49,9 +60,20 @@ public class NewEntry extends JFrame {
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getSource().equals(btnSubmit)) {
-				
+				String[] elements = new String[tf.length];
+				for(int i = 0; i < tf.length; i++) {
+					elements[i] = tf[i].getText();
+				}
+				Database db = new Database();
+				if(!db.insertInto(table, elements)) {
+					//joption
+				} else {
+					parent.setEnabled(true);
+					NewEntry.this.setVisible(false);
+				}
 			} else if(ae.getSource().equals(btnCancel)) {
-				
+				parent.setEnabled(true);
+				NewEntry.this.setVisible(false);
 			}
 		}
 	}

@@ -151,6 +151,16 @@ public class Database {
 	}
 	
 	
+	public boolean insertInto(String table, String[] elements) {
+		try {
+			stmt.executeUpdate("");
+			return true;
+		} catch(SQLException e) {
+			return false;
+		}
+	}
+	
+	
 	
 	//resultset to table
 	public JTable createTable(String query, String[] cols) {
@@ -197,5 +207,7 @@ public class Database {
 	    return new DefaultTableModel(data, columnNames);
 
 	}
+	
+	
 
 }
