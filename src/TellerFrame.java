@@ -22,9 +22,9 @@ public class TellerFrame extends JFrame {
 			db = new Database();
 			btnL = new ButtonListener();
 			mdlTickets = new DefaultListModel<String>();
-			String[] tblTklCols = {"ID", "Type", "Event", "Price", "Available"};
+			String[] tblTklCols = {"ID", "Type", "Event", "Available", "Price"};
 			tblTickets = db.createTable("SELECT tickets.ticket_id AS ID, tickets.ticket_type AS TYPE, events.event_name AS EVENT, "
-					+ "tickets.ticket_price AS PRICE, tickets.ticket_stock AS AVAILABLE "
+					+ "tickets.ticket_stock AS AVAILABLE, tickets.ticket_price AS PRICE "
 					+"FROM tickets " 
 					+"INNER JOIN events " 
 					+"ON tickets.event_id=events.event_id "
