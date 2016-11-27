@@ -153,7 +153,16 @@ public class Database {
 	
 	public boolean insertInto(String table, String[] elements) {
 		try {
-			stmt.executeUpdate("");
+			String query = "";
+			if(table.equals("events")) {
+				query = "INSERT INTO events VALUES(null, '"+elements[1]+"', '"+elements[2]+"', '"+elements[3]+"', '"+elements[4]+"', '"+elements[5]+"', '"+elements[6]+"')";
+			} else if(table.equals("tickets"))
+				query = "INSERT INTO tickets VALUES(null, "+elements[1]+", '"+elements[2]+"', "+elements[3]+", "+elements[4]+")";
+			else if(table.equals("transactions")) {
+				query = "INSERT INTO transactions VALUES(null, "+elements[1]+", '"+elements[2]+"', "+elements[3]+", "+elements[4]+", "+elements[5]+", "+elements[6]+", "+elements[7]+")";
+			
+			}
+			stmt.executeUpdate(query);
 			return true;
 		} catch(SQLException e) {
 			return false;

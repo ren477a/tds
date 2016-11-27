@@ -10,10 +10,10 @@ public class NewEntry extends JFrame {
 	private JTextField[] tf;
 	private JButton btnSubmit, btnCancel;
 	private ButtonListener btnL;
-	private JFrame parent;
+	private AdminFrame parent;
 	private String table;
 	
-	public NewEntry(String[] lblNames, JFrame parent) {
+	public NewEntry(String[] lblNames, AdminFrame parent) {
 		if(lblNames[0].equals("Event ID"))
 			table = "events";
 		else if(lblNames[0].equals("Ticket ID"))
@@ -36,6 +36,7 @@ public class NewEntry extends JFrame {
 			pnl.add(Box.createRigidArea(new Dimension(0, 10)));
 		}
 		tf[0].setEditable(false);
+		
 		btnL = new ButtonListener();
 		btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(btnL);
@@ -66,9 +67,10 @@ public class NewEntry extends JFrame {
 				}
 				Database db = new Database();
 				if(!db.insertInto(table, elements)) {
-					//joption
+					JOptionPane.showMessageDialog(null, "Invalid input!\nNote: \nDate format is (YYYY-MM-DD)\nTime format is (HH-MM-SS)");
 				} else {
 					parent.setEnabled(true);
+					parent.refresh();
 					NewEntry.this.setVisible(false);
 				}
 			} else if(ae.getSource().equals(btnCancel)) {

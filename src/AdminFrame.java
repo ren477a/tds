@@ -14,6 +14,7 @@ public class AdminFrame extends JFrame {
 	private final String[] eventsC = {"Event ID", "Code", "Event", "Description", "Venue", "Date", "Time"};
 	private final String[] ticketsC = {"Ticket ID", "Event ID", "Type", "Price", "Stock"};
 	private final String[] transactionsC = {"ID", "Transaction #", "Date of Purchase", "Ticket ID", "Quantity", "Total", "Cash", "Change"};
+	private JComboBox<String> cb;
 	private Database db;
 	
 	private enum State {
@@ -26,10 +27,9 @@ public class AdminFrame extends JFrame {
 		state = State.EVENTS;
 		this.db = db;
 		table = db.createTable(eventsQ, eventsC);
-		//table = db.createTable(ticketsQ, ticketsC);
-		//table = db.createTable(transactionsQ, transactionsC);
 		JScrollPane scrlTbl = new JScrollPane(table);
 		
+		cb = new JComboBox<String>(new String[] {"Events", "Tickets", "Transactions"});
 		
 		btnL = new ButtonListener();
 		
@@ -47,18 +47,38 @@ public class AdminFrame extends JFrame {
 		pnlBtns.add(btnEdit);
 		pnlBtns.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+		JPanel pnlTop = new JPanel(new FlowLayout());
+		pnlTop.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pnlTop.add(cb);
+		pnlTop.add(btnLoad);
+		
 		JPanel pnlBody = new JPanel();
 		pnlBody.setLayout(new BoxLayout(pnlBody, BoxLayout.PAGE_AXIS));
 		pnlBody.setBorder(new EmptyBorder(20, 20, 20, 20));
+		pnlBody.add(pnlTop);
 		pnlBody.add(scrlTbl);
 		pnlBody.add(pnlBtns);
 		
 		add(pnlBody);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("TDS: Admin");
-		setSize(700, 700);
+		setSize(950, 700);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	public void refresh() {
+		switch(state) {
+		case EVENTS:
+			db.refreshTable(table, eventsQ, eventsC);
+			break;
+		case TICKETS:
+			db.refreshTable(table, ticketsQ, ticketsC);
+			break;
+		case TRANSACTIONS:
+			db.refreshTable(table, transactionsQ, transactionsC);
+			break;
+		}
 	}
 	
 	private class ButtonListener implements ActionListener {
@@ -68,12 +88,15 @@ public class AdminFrame extends JFrame {
 				switch(state) {
 				case EVENTS:
 					ne = new NewEntry(eventsC, AdminFrame.this);
+					db.refreshTable(table, eventsQ, eventsC);
 					break;
 				case TICKETS:
 					ne = new NewEntry(ticketsC, AdminFrame.this);
+					db.refreshTable(table, ticketsQ, ticketsC);
 					break;
 				case TRANSACTIONS:
 					ne = new NewEntry(transactionsC, AdminFrame.this);
+					db.refreshTable(table, transactionsQ, transactionsC);
 					break;
 				}
 			} else if(ae.getSource().equals(btnRemove)) {
@@ -102,6 +125,25 @@ public class AdminFrame extends JFrame {
 					break;
 				case TRANSACTIONS:
 					break;
+				}
+			} else if(ae.getSource().equals(btnLoad)) {
+				if(cb.getSelectedIndex()==0) {
+					db.refreshTable(table, eventsQ, eventsC);
+					setSize(950, 700);
+					setLocationRelativeTo(null);
+					state = State.EVENTS;
+				}
+				else if(cb.getSelectedIndex()==1) {
+					db.refreshTable(table, ticketsQ, ticketsC); 
+					setSize(420, 700);
+					setLocationRelativeTo(null);
+					state = State.TICKETS;
+				}
+				else if(cb.getSelectedIndex()==2) {
+					db.refreshTable(table, transactionsQ, transactionsC);
+					setSize(700, 700);
+					setLocationRelativeTo(null);
+					state = State.TRANSACTIONS;
 				}
 			}
 		}
