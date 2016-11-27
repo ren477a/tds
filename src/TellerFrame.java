@@ -48,6 +48,7 @@ public class TellerFrame extends JFrame {
 
 			tfCash = new JTextField();
 			tfCash.setAlignmentX(Component.LEFT_ALIGNMENT);
+			tfCash.setMaximumSize(new Dimension(100, 20));
 			
 			btnAdd = new JButton("Add to Cart");
 			btnAdd.addActionListener(btnL);
@@ -68,6 +69,7 @@ public class TellerFrame extends JFrame {
 			pnlLeft.setLayout(new BoxLayout(pnlLeft, BoxLayout.PAGE_AXIS));
 			pnlLeft.setBorder(new EmptyBorder(20,20,20,20));
 			pnlLeft.add(lblSelTickets);
+			pnlLeft.add(Box.createRigidArea(new Dimension(0, 5)));
 			pnlLeft.add(scrTickets);
 			pnlLeft.add(pnlBtnLeft);
 			
@@ -78,10 +80,14 @@ public class TellerFrame extends JFrame {
 			JPanel pnlRight = new JPanel();
 			pnlRight.setLayout(new BoxLayout(pnlRight, BoxLayout.PAGE_AXIS));
 			pnlRight.add(lblCart);
+			pnlRight.add(Box.createRigidArea(new Dimension(0, 5)));
 			pnlRight.add(scrCart);
+			pnlRight.add(Box.createRigidArea(new Dimension(0, 5)));
 			pnlRight.add(lblT);
 			pnlRight.add(lblTotal);
+			pnlRight.add(Box.createRigidArea(new Dimension(0, 5)));
 			pnlRight.add(lblCashPay);
+			pnlRight.add(Box.createRigidArea(new Dimension(0, 5)));
 			pnlRight.add(tfCash);
 			pnlRight.add(pnlBtnRight);
 			
