@@ -116,9 +116,11 @@ public class TellerFrame extends JFrame {
 						if(cash < cart.getTotal())
 							JOptionPane.showMessageDialog(null, "Insufficient payment!");
 						else {
-							cart.submitPurchase(db, cash);
-							
 							JOptionPane.showMessageDialog(null, cart.generateReceipt(cash), "Transaction Completed", JOptionPane.PLAIN_MESSAGE);
+							cart.submitPurchase(db, cash);
+							tfCash.setText("");
+							mdlCart.removeAllElements();
+							btnSubmit.setEnabled(false);
 							db.refreshTable(tblTickets, tblTktsQuery, tblTktCols);
 							
 						}

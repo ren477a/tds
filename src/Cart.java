@@ -81,5 +81,9 @@ public class Cart {
 		for(int i = 0; i < tickets.size(); i++) {
 			db.recordTransaction(id, tickets.get(i).getId(), quantity.get(i), total, cash);
 		}
+		tickets.clear();
+		quantity.clear();
+		summary.clear();
+		total=0;
 	}
 }
