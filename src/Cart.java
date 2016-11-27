@@ -51,19 +51,24 @@ public class Cart {
 		return summary.get(summary.size()-1);
 	}
 	
-	public String generateReceipt() {
+	public String generateReceipt(double cash) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("RECEIPT:\n");
+		sb.append("Qty       Price        Item\n");
 		for(int i = 0; i < tickets.size(); i++) {
 			sb.append(quantity.get(i));
-			sb.append(" : ");
+			sb.append("          ");
+			sb.append(tickets.get(i).getPrice()*quantity.get(i));
+			sb.append("     ");
 			sb.append(tickets.get(i).getType());
 			sb.append(" : ");
 			sb.append(tickets.get(i).getEventCode());
-			sb.append(" :\t");
-			sb.append(tickets.get(i).getPrice());
 			sb.append("\n");
 		}
+		sb.append("Total:   " + total);
+		sb.append("\nCash:   " + cash);
+		double change = cash - total;
+		sb.append("\nChange:   " + change);
 		return sb.toString();
 	}
 	

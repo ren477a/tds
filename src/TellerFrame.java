@@ -83,12 +83,16 @@ public class TellerFrame extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				if(ae.getSource().equals(btnAdd)) {
 					if(tblTickets.getSelectedRow()!=-1) {
-						int qty = Integer.parseInt(JOptionPane.showInputDialog("Enter quantity:"));
-						int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
-						cart.addToCart(new Ticket(id), qty);
-						mdlCart.addElement(cart.getLastDisplaySummary());
-						lblTotal.setText(Double.toString(cart.getTotal()));
-						btnSubmit.setEnabled(true);
+						try {
+							int qty = Integer.parseInt(JOptionPane.showInputDialog("Enter quantity:"));
+							int id = (int) tblTickets.getModel().getValueAt(tblTickets.getSelectedRow(), 0);
+							cart.addToCart(new Ticket(id), qty);
+							mdlCart.addElement(cart.getLastDisplaySummary());
+							lblTotal.setText(Double.toString(cart.getTotal()));
+							btnSubmit.setEnabled(true);
+						} catch (NumberFormatException e) {
+
+						}
 					} 
 				} else if(ae.getSource().equals(btnRemove)) {
 					String selected = listCart.getSelectedValue();
@@ -111,7 +115,7 @@ public class TellerFrame extends JFrame {
 						if(cash < cart.getTotal())
 							JOptionPane.showMessageDialog(null, "Insufficient payment!");
 						else {
-							System.out.println(cash);
+							JOptionPane.showMessageDialog(null, cart.generateReceipt(cash), "Transaction Completed", JOptionPane.PLAIN_MESSAGE);
 						}
 					} catch (NumberFormatException e) {
 						
