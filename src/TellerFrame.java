@@ -31,12 +31,15 @@ public class TellerFrame extends JFrame {
 			mdlTickets = new DefaultListModel<String>();
 			tblTickets = db.createTable(tblTktsQuery ,tblTktCols);
 			tblTickets.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			tblTickets.setAlignmentX(Component.LEFT_ALIGNMENT);
 			mdlCart = new DefaultListModel<String>();
 			listCart = new JList<String>(mdlCart);
 			listCart.setLayoutOrientation(JList.VERTICAL);
 			listCart.setVisibleRowCount(3);
 			JScrollPane scrCart = new JScrollPane(listCart);
+			scrCart.setAlignmentX(Component.LEFT_ALIGNMENT);
 			JScrollPane scrTickets = new JScrollPane(tblTickets);
+			scrTickets.setAlignmentX(Component.LEFT_ALIGNMENT);
 			lblSelTickets = new JLabel("Select Tickets:");
 			lblCart = new JLabel("Cart:");
 			lblT = new JLabel("Total:");
@@ -44,6 +47,7 @@ public class TellerFrame extends JFrame {
 			lblCashPay = new JLabel("Cash Payment:");
 
 			tfCash = new JTextField();
+			tfCash.setAlignmentX(Component.LEFT_ALIGNMENT);
 			
 			btnAdd = new JButton("Add to Cart");
 			btnAdd.addActionListener(btnL);
@@ -55,23 +59,35 @@ public class TellerFrame extends JFrame {
 			btnSubmit.addActionListener(btnL);
 			btnSubmit.setEnabled(false);
 			
-			JPanel pnlTeller = new JPanel();
-			pnlTeller.setLayout(new BoxLayout(pnlTeller, BoxLayout.PAGE_AXIS));
-			pnlTeller.setBorder(new EmptyBorder(20,20,20,20));
-			pnlTeller.add(lblSelTickets);
-			pnlTeller.add(scrTickets);
-			pnlTeller.add(btnAdd);
-			pnlTeller.add(btnViewMore);
-			pnlTeller.add(lblCart);
-			pnlTeller.add(scrCart);
-			pnlTeller.add(lblT);
-			pnlTeller.add(lblTotal);
-			pnlTeller.add(lblCashPay);
-			pnlTeller.add(tfCash);
-			pnlTeller.add(btnRemove);
-			pnlTeller.add(btnSubmit);
 			
-			add(pnlTeller);
+			JPanel pnlBtnLeft = new JPanel(new FlowLayout());
+			pnlBtnLeft.setAlignmentX(Component.LEFT_ALIGNMENT);
+			pnlBtnLeft.add(btnAdd);
+			pnlBtnLeft.add(btnViewMore);
+			JPanel pnlLeft = new JPanel();
+			pnlLeft.setLayout(new BoxLayout(pnlLeft, BoxLayout.PAGE_AXIS));
+			pnlLeft.setBorder(new EmptyBorder(20,20,20,20));
+			pnlLeft.add(lblSelTickets);
+			pnlLeft.add(scrTickets);
+			pnlLeft.add(pnlBtnLeft);
+			
+			JPanel pnlBtnRight = new JPanel(new FlowLayout());
+			pnlBtnRight.setAlignmentX(Component.LEFT_ALIGNMENT);
+			pnlBtnRight.add(btnRemove);
+			pnlBtnRight.add(btnSubmit);
+			JPanel pnlRight = new JPanel();
+			pnlRight.setLayout(new BoxLayout(pnlRight, BoxLayout.PAGE_AXIS));
+			pnlRight.add(lblCart);
+			pnlRight.add(scrCart);
+			pnlRight.add(lblT);
+			pnlRight.add(lblTotal);
+			pnlRight.add(lblCashPay);
+			pnlRight.add(tfCash);
+			pnlRight.add(pnlBtnRight);
+			
+			pnlLeft.add(pnlRight);
+
+			add(pnlLeft);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setTitle("Ticket Master");
 			setSize(600, 600);
