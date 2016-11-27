@@ -23,9 +23,9 @@ public class TellerFrame extends JFrame {
 		
 		private Cart cart;
 		
-		public TellerFrame() {
+		public TellerFrame(Database db) {
 			cart = new Cart();
-			db = new Database();
+			this.db = db;
 			btnL = new ButtonListener();
 			tblTickets = db.createTable(tblTktsQuery ,tblTktCols);
 			tblTickets.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -72,6 +72,7 @@ public class TellerFrame extends JFrame {
 			pnlTop.add(scrTickets);
 			pnlTop.add(pnlBtnLeft);
 			pnlTop.add(lblCart);
+			pnlTop.add(Box.createRigidArea(new Dimension(0, 5)));
 			JPanel pnlBtnRight = new JPanel(new FlowLayout());
 			pnlBtnRight.setAlignmentX(Component.CENTER_ALIGNMENT);
 			pnlBtnRight.add(btnRemove);
@@ -96,7 +97,7 @@ public class TellerFrame extends JFrame {
 
 			add(pnlTop);
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
-			setTitle("Ticket Master");
+			setTitle("TDS: Teller");
 			setSize(600, 600);
 			setLocationRelativeTo(null);
 			setVisible(true);

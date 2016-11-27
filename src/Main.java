@@ -9,7 +9,11 @@ public class Main extends JFrame{
 	JLabel lblBanner;
 	JButton btnAdmin, btnTeller, btnExit;
 	ButtonListener btnL;
+	Database db;
+	
 	public Main() {
+		db = new Database();
+		
 		pnlMain = new JPanel(new BorderLayout());
 		pnlBtns = new JPanel();
 		
@@ -35,10 +39,11 @@ public class Main extends JFrame{
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getSource().equals(btnTeller)) {
-				TellerFrame tf = new TellerFrame();
+				TellerFrame tf = new TellerFrame(db);
 				setVisible(false);
 			} else if(ae.getSource().equals(btnAdmin)) {
-				
+				AdminFrame af = new AdminFrame(db);
+				setVisible(false);
 			}
 		}
 	}

@@ -1,10 +1,8 @@
 import java.awt.Component;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Vector;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -65,12 +63,6 @@ public class Database {
 	}
 	
 	public String getTicketInfo(int tkt_id) {
-		//name of event
-		//type of ticket
-		//date of event
-		//time of event
-		//venue
-		//description
 		try {
 			rs = stmt.executeQuery("SELECT event_id, ticket_type FROM tickets WHERE ticket_id="+tkt_id);
 			rs.next();
@@ -99,6 +91,23 @@ public class Database {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public boolean deleteEntry(int id, String tableName) {
+		try {
+			String colName = "";
+			if(tableName.equals("events"))
+				colName = "event_id";
+			else if(tableName.equals("tickets"))
+				colName = "ticket_id";
+			else if(tableName.equals("transactions"))
+				colName = "transac_id";
+			stmt.executeUpdate("DELETE FROM "+tableName+" WHERE "+colName+"="+id);
+			return true;
+		} catch(SQLException e) {
+			return false;
+		}
+		
 	}
 	
 	public void recordTransaction(int trn_id, int tkt_id, int qty, double price, double cash) {
@@ -149,14 +158,17 @@ public class Database {
 		try {
 			rs = stmt.executeQuery(query);
 			table = new JTable(buildTableModel(rs, cols)){
-			    @Override
-			       public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-			           Component component = super.prepareRenderer(renderer, row, column);
-			           int rendererWidth = component.getPreferredSize().width;
-			           TableColumn tableColumn = getColumnModel().getColumn(column);
-			           tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-			           return component;
-			        }
+//			    @Override
+//			       public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+//			           Component component = super.prepareRenderer(renderer, row, column);
+//			           int rendererWidth = component.getPreferredSize().width;
+//			           TableColumn tableColumn = getColumnModel().getColumn(column);
+//			           tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+//			           return component;
+//			        }
+			    	public boolean isCellEditable(int row, int column) {                
+			    		return false;    
+			    	}
 			    };
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);;
