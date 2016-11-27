@@ -158,14 +158,14 @@ public class Database {
 		try {
 			rs = stmt.executeQuery(query);
 			table = new JTable(buildTableModel(rs, cols)){
-//			    @Override
-//			       public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-//			           Component component = super.prepareRenderer(renderer, row, column);
-//			           int rendererWidth = component.getPreferredSize().width;
-//			           TableColumn tableColumn = getColumnModel().getColumn(column);
-//			           tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-//			           return component;
-//			        }
+			    @Override
+			       public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+			           Component component = super.prepareRenderer(renderer, row, column);
+			           int rendererWidth = component.getPreferredSize().width;
+			           TableColumn tableColumn = getColumnModel().getColumn(column);
+			           tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+			           return component;
+			        }
 			    	public boolean isCellEditable(int row, int column) {                
 			    		return false;    
 			    	}

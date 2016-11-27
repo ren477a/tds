@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AdminFrame extends JFrame {
-	private JButton btnAdd, btnRemove, btnEdit;
+	private JButton btnAdd, btnRemove, btnEdit, btnLoad;
 	private JTable table;
 	private ButtonListener btnL;
 	private final String eventsQ = "SELECT * FROM events";
@@ -23,15 +23,18 @@ public class AdminFrame extends JFrame {
 	State state;
 	
 	public AdminFrame(Database db) {
-		state = State.TRANSACTIONS;
+		state = State.EVENTS;
 		this.db = db;
-		//table = db.createTable(eventsQ, eventsC);
+		table = db.createTable(eventsQ, eventsC);
 		//table = db.createTable(ticketsQ, ticketsC);
-		table = db.createTable(transactionsQ, transactionsC);
+		//table = db.createTable(transactionsQ, transactionsC);
 		JScrollPane scrlTbl = new JScrollPane(table);
 		
 		
 		btnL = new ButtonListener();
+		
+		btnLoad = new JButton("Load Table");
+		btnLoad.addActionListener(btnL);
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(btnL);
 		btnRemove = new JButton("Remove");
@@ -53,7 +56,7 @@ public class AdminFrame extends JFrame {
 		add(pnlBody);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("TDS: Admin");
-		setSize(580, 700);
+		setSize(700, 700);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -61,12 +64,16 @@ public class AdminFrame extends JFrame {
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getSource().equals(btnAdd)) {
+				NewEntry ne;
 				switch(state) {
 				case EVENTS:
+					ne = new NewEntry(eventsC, AdminFrame.this);
 					break;
 				case TICKETS:
+					ne = new NewEntry(ticketsC, AdminFrame.this);
 					break;
 				case TRANSACTIONS:
+					ne = new NewEntry(transactionsC, AdminFrame.this);
 					break;
 				}
 			} else if(ae.getSource().equals(btnRemove)) {
