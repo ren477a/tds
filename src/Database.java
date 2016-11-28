@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -110,6 +111,48 @@ public class Database {
 		
 	}
 	
+	public boolean loadEntry(JTextField[] tf, String table, int id) {
+		try {
+			String idCol = "";
+			if(table.equals("events"))
+				idCol = "event_id";
+			else if(table.equals("tickets"))
+				idCol = "ticket_id";
+			else if(table.equals("transactions"))
+				idCol = "id";
+			System.out.println("SELECT * FROM " + table + " WHERE "+idCol+"="+id);
+			rs = stmt.executeQuery("SELECT * FROM " + table + " WHERE "+idCol+"="+id);
+			rs.next();
+			if(table.equals("events")) {
+				tf[0].setText(Integer.toString(rs.getInt("event_id")));
+				tf[1].setText(rs.getString("code"));
+				tf[2].setText(rs.getString("event_name"));
+				tf[3].setText(rs.getString("event_description"));
+				tf[4].setText(rs.getString("venue"));
+				tf[5].setText(rs.getString("event_date"));
+				tf[6].setText(rs.getString("event_time"));
+			} else if(table.equals("tickets")) {
+				tf[0].setText(Integer.toString(rs.getInt("ticket_id")));
+				tf[1].setText(rs.getString("event_id"));
+				tf[2].setText(rs.getString("ticket_type"));
+				tf[3].setText(rs.getString("ticket_price"));
+				tf[4].setText(rs.getString("ticket_stock"));
+			} else if(table.equals("transactions")) {
+				tf[0].setText(Integer.toString(rs.getInt("id")));
+				tf[1].setText(rs.getString("transac_id"));
+				tf[2].setText(rs.getString("date_of_purchase"));
+				tf[3].setText(rs.getString("ticket_id"));
+				tf[4].setText(Integer.toString(rs.getInt("quantity")));
+				tf[5].setText(Double.toString(rs.getDouble("total_price")));
+				tf[6].setText(Double.toString(rs.getDouble("payment")));
+				tf[7].setText(Double.toString(rs.getDouble("change")));
+			}
+			return true;
+		} catch(SQLException e) {
+			return false;
+		}
+	}
+	
 	public void recordTransaction(int trn_id, int tkt_id, int qty, double price, double cash) {
 		try {
 			stmt.executeUpdate("UPDATE tickets "
@@ -165,6 +208,26 @@ public class Database {
 			stmt.executeUpdate(query);
 			return true;
 		} catch(SQLException e) {
+			return false;
+		}
+	}
+	
+	public boolean update(String table, String[] elements, int id) {
+		try {
+			String query = "";
+			if(table.equals("events")) {
+				query = "UPDATE events SET code='"+elements[1]+"', event_name='"+elements[2]+"', event_description= '"+elements[3]+"', venue='"+elements[4]+"', event_date= '"+elements[5]+"', event_time= '"+elements[6]+"' WHERE event_id="+id;
+			} else if(table.equals("tickets"))
+				query = "UPDATE tickets SET event_id="+elements[1]+", ticket_type='"+elements[2]+"', ticket_price= "+elements[3]+", ticket_stock="+elements[4]+" WHERE ticket_id="+id;
+			else if(table.equals("transactions")) {
+				query = "UPDATE transactions SET transac_id="+elements[1]+", date_of_purchase='"+elements[2]+"', ticket_id="+elements[3]+", quantity="+elements[4]+", total_price="+elements[5]+", payment="+elements[6]+", change="+elements[7]+" WHERE id="+id;
+			
+			}
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			return true;
+		} catch(SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

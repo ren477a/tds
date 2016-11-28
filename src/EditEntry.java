@@ -1,19 +1,21 @@
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.*;
-import java.awt.event.*;
 
-
-public class NewEntry extends JFrame {
-	
+public class EditEntry extends JFrame {
 	private JTextField[] tf;
 	private JButton btnSubmit, btnCancel;
 	private ButtonListener btnL;
 	private AdminFrame parent;
 	private String table;
 	
-	public NewEntry(String[] lblNames, AdminFrame parent) {
+	public EditEntry(String[] lblNames, AdminFrame parent, int id) {
 		if(lblNames[0].equals("Event ID"))
 			table = "events";
 		else if(lblNames[0].equals("Ticket ID"))
@@ -25,6 +27,7 @@ public class NewEntry extends JFrame {
 		this.parent = parent;
 		this.parent.setEnabled(false);
 		tf = new JTextField[lblNames.length];
+		
 		JPanel pnl = new JPanel();
 		pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
 		pnl.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -36,6 +39,8 @@ public class NewEntry extends JFrame {
 			pnl.add(Box.createRigidArea(new Dimension(0, 10)));
 		}
 		tf[0].setEditable(false);
+		Database db = new Database();
+		db.loadEntry(tf, table, id);
 		
 		btnL = new ButtonListener();
 		btnSubmit = new JButton("Submit");
@@ -52,7 +57,7 @@ public class NewEntry extends JFrame {
 		add(pnl);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("New Entry");
+		setTitle("Edit Entry");
 		setSize(400, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -60,24 +65,24 @@ public class NewEntry extends JFrame {
 	
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
+			String[] elements = new String[tf.length];
+			for(int i = 0; i < tf.length; i++) {
+				elements[i] = tf[i].getText();
+			}
+			Database db = new Database();
+			
 			if(ae.getSource().equals(btnSubmit)) {
-//				String[] elements = new String[tf.length];
-//				for(int i = 0; i < tf.length; i++) {
-//					elements[i] = tf[i].getText();
-//				}
-//				Database db = new Database();
-//				if(!db.insertInto(table, elements)) {
-//					JOptionPane.showMessageDialog(null, "Invalid input!\nNote: \nDate format is (YYYY-MM-DD)\nTime format is (HH-MM-SS)");
-//				} else {
-//					parent.setEnabled(true);
-//					parent.refresh();
-//					NewEntry.this.setVisible(false);
-//				}
+				if(!db.update(table, elements, Integer.parseInt(tf[0].getText()))) {
+					JOptionPane.showMessageDialog(null, "Invalid input!\nNote: \nDate format is (YYYY-MM-DD)\nTime format is (HH-MM-SS)");
+				} else {
+					parent.setEnabled(true);
+					parent.refresh();
+					EditEntry.this.setVisible(false);
+				}
 			} else if(ae.getSource().equals(btnCancel)) {
 				parent.setEnabled(true);
-				NewEntry.this.setVisible(false);
+				EditEntry.this.setVisible(false);
 			}
 		}
 	}
-	
 }

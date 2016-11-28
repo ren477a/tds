@@ -1,0 +1,9 @@
+RECEIPT:
+
+Date:   Qty       Price        Item
+2          15000.0     Silver : COLDPLY AHFOD
+1          7500.0     Silver : COLDPLY AHFOD
+
+Total:   22500.0
+Cash:   23000.0
+Change:   500.0

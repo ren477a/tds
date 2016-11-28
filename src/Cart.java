@@ -1,3 +1,5 @@
+import java.io.*;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Cart {
@@ -75,8 +77,22 @@ public class Cart {
 		return sb.toString();
 	}
 	
-	public void submitPurchase(Database db, double cash) {
+	public void submitPurchase(Database db, double cash, String receipt) {
 		int id = db.getLatestTransacID() + 1;
+		File f = new File(id+".txt");
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+			String[] lines = receipt.split("\n");
+			for(int i = 0; i < lines.length; i++) {
+				writer.write(lines[i]);
+				writer.newLine();
+			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 		System.out.println(id);
 		for(int i = 0; i < tickets.size(); i++) {
 			db.recordTransaction(id, tickets.get(i).getId(), quantity.get(i), total, cash);

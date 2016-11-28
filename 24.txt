@@ -1,0 +1,8 @@
+RECEIPT:
+
+Date:   Qty       Price        Item
+1          1800.0     Gen Ad : COLDPLY AHFOD
+
+Total:   1800.0
+Cash:   2000.0
+Change:   200.0

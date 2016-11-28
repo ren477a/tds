@@ -138,8 +138,9 @@ public class TellerFrame extends JFrame {
 						if(cash < cart.getTotal())
 							JOptionPane.showMessageDialog(null, "Insufficient payment!");
 						else {
-							JOptionPane.showMessageDialog(null, cart.generateReceipt(cash), "Transaction Completed", JOptionPane.PLAIN_MESSAGE);
-							cart.submitPurchase(db, cash);
+							String receipt = cart.generateReceipt(cash);
+							JOptionPane.showMessageDialog(null, receipt, "Transaction Completed", JOptionPane.PLAIN_MESSAGE);
+							cart.submitPurchase(db, cash, receipt);
 							tfCash.setText("");
 							mdlCart.removeAllElements();
 							lblTotal.setText("0");

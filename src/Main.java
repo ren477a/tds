@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,20 +9,38 @@ public class Main extends JFrame{
 	
 	JPanel pnlMain, pnlBtns;
 	JLabel lblBanner;
+	JTextField tfUser;
+	JPasswordField tfPass;
 	JButton btnAdmin, btnTeller, btnExit;
 	ButtonListener btnL;
 	Database db;
+	
+	private String userAdmin = "admin";
+	private String userTeller = "teller";
+	private String passAdmin = "123";
+	private String passTeller = "123";
 	
 	public Main() {
 		db = new Database();
 		
 		pnlMain = new JPanel(new BorderLayout());
+		pnlMain.setBorder(new EmptyBorder(20, 20, 20, 20));
 		pnlBtns = new JPanel();
 		
+		tfUser = new JTextField();
+		tfPass = new JPasswordField();
+		JPanel pnlCenter = new JPanel(new GridLayout(4, 1));
+		pnlCenter.setBorder(new EmptyBorder(20, 20, 20, 20));
+		pnlCenter.add(new JLabel("User:"));
+		pnlCenter.add(tfUser);
+		pnlCenter.add(new JLabel("Pass:"));
+		pnlCenter.add(tfPass);
+		
+		
 		btnL = new ButtonListener();
-		btnAdmin = new JButton("Admin");
+		btnAdmin = new JButton("Admin Login");
 		btnAdmin.addActionListener(btnL);
-		btnTeller = new JButton("Teller");
+		btnTeller = new JButton("Teller Login");
 		btnTeller.addActionListener(btnL);
 		btnExit = new JButton("Exit");
 		btnExit.addActionListener(btnL);
@@ -30,7 +50,8 @@ public class Main extends JFrame{
 		pnlBtns.add(btnAdmin);
 		pnlBtns.add(btnTeller);
 		pnlBtns.add(btnExit);
-		pnlMain.add(lblBanner);
+		pnlMain.add(lblBanner, BorderLayout.NORTH);
+		pnlMain.add(pnlCenter);
 		pnlMain.add(pnlBtns, BorderLayout.SOUTH);
 		add(pnlMain);
 		
@@ -39,10 +60,18 @@ public class Main extends JFrame{
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			if(ae.getSource().equals(btnTeller)) {
-				TellerFrame tf = new TellerFrame(db);
-				setVisible(false);
+				String pass = new String(tfPass.getPassword());
+				if(tfUser.getText().equals(userTeller) && pass.equals(passTeller)) {
+					TellerFrame tf = new TellerFrame(db);
+					setVisible(false);
+				}
+				
 			} else if(ae.getSource().equals(btnAdmin)) {
-				AdminFrame af = new AdminFrame(db);
+				String pass = new String(tfPass.getPassword());
+				if(tfUser.getText().equals(userAdmin) && pass.equals(passAdmin)) {
+					AdminFrame af = new AdminFrame(db);
+					setVisible(false);
+				}
 				setVisible(false);
 			}
 		}

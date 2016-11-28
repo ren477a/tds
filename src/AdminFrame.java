@@ -118,13 +118,29 @@ public class AdminFrame extends JFrame {
 				}
 				
 			} else if(ae.getSource().equals(btnEdit)) {
-				switch(state) {
-				case EVENTS:
-					break;
-				case TICKETS:
-					break;
-				case TRANSACTIONS:
-					break;
+				try {
+					try {
+						int id = (int) table.getModel().getValueAt(table.getSelectedRow(), 0);
+						EditEntry ee;
+						switch(state) {
+						case EVENTS:
+							ee = new EditEntry(eventsC, AdminFrame.this, id);
+							db.refreshTable(table, eventsQ, eventsC);
+							break;
+						case TICKETS:
+							ee = new EditEntry(ticketsC, AdminFrame.this, id);
+							db.refreshTable(table, ticketsQ, ticketsC);
+							break;
+						case TRANSACTIONS:
+							ee = new EditEntry(transactionsC, AdminFrame.this, id);
+							db.refreshTable(table, transactionsQ, transactionsC);
+							break;
+						}
+					} catch (Exception e) {
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			} else if(ae.getSource().equals(btnLoad)) {
 				if(cb.getSelectedIndex()==0) {
@@ -144,6 +160,16 @@ public class AdminFrame extends JFrame {
 					setSize(700, 700);
 					setLocationRelativeTo(null);
 					state = State.TRANSACTIONS;
+				}
+				
+				if(state==State.TRANSACTIONS){
+					btnAdd.setEnabled(false);
+					btnRemove.setEnabled(false);
+					btnEdit.setEnabled(false);
+				} else {
+					btnAdd.setEnabled(true);
+					btnRemove.setEnabled(true);
+					btnEdit.setEnabled(true);
 				}
 			}
 		}

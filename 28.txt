@@ -1,0 +1,8 @@
+RECEIPT:
+
+Qty       Price        Item
+2          7000.0     Bronze : COLDPLY AHFOD
+
+Total:   7000.0
+Cash:   7500.0
+Change:   500.0

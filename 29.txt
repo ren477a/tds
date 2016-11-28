@@ -1,0 +1,8 @@
+RECEIPT:
+
+Qty       Price        Item
+2          45000.0     VIP : COLDPLY AHFOD
+
+Total:   45000.0
+Cash:   46000.0
+Change:   1000.0

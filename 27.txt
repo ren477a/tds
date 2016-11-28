@@ -1,0 +1,8 @@
+RECEIPT:
+
+Date:   Qty       Price        Item
+1          12500.0     Gold : COLDPLY AHFOD
+
+Total:   12500.0
+Cash:   12500.0
+Change:   0.0

@@ -1,0 +1,9 @@
+RECEIPT:
+
+Qty       Price        Item
+1          3500.0     Bronze : COLDPLY AHFOD
+1          22500.0     VIP : COLDPLY AHFOD
+
+Total:   26000.0
+Cash:   30000.0
+Change:   4000.0
