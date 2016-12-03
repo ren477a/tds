@@ -1,0 +1,9 @@
+RECEIPT:
+
+Qty       Price        Item
+2          20.0     Medyo Malayo : GG
+1          500.0     Type1 : RDC
+
+Total:   520.0
+Cash:   600.0
+Change:   80.0

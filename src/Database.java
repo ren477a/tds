@@ -1,5 +1,6 @@
 import java.awt.Component;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -280,6 +281,31 @@ public class Database {
 
 	}
 	
+	//reports
+	public String[] getEventNames(int transacID) {
+		//String[] res = null;
+		ArrayList<String> res = new ArrayList<String>();
+		String q = "SELECT DISTINCT event_name "
+				+ "FROM transactions tr "
+				+ "JOIN tickets t ON tr.ticket_id=t.ticket_id "
+				+ "JOIN events e ON e.event_id=t.event_id "
+				+ "WHERE transac_id="+transacID;
+		try {
+			rs = stmt.executeQuery(q);
+			while (rs.next()) {
+				res.add(rs.getString("event_name"));
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return (String[]) res.toArray();
+	}
+	
+	public Double[] getTRSummary(int transacID) {
+		ArrayList<Double> res = new ArrayList<Double>();
+		
+		return (Double[]) res.toArray();
+	}
 	
 
 }
