@@ -283,7 +283,6 @@ public class Database {
 	
 	//reports
 	public String[] getEventNames(int transacID) {
-		//String[] res = null;
 		ArrayList<String> res = new ArrayList<String>();
 		String q = "SELECT DISTINCT event_name "
 				+ "FROM transactions tr "
@@ -298,13 +297,67 @@ public class Database {
 		} catch (SQLException e) {
 			return null;
 		}
-		return (String[]) res.toArray();
+		String[] out = new String[res.size()];
+		for (int i = 0; i < res.size(); i++) {
+			out[i]=res.get(i);
+		}
+		
+		
+		return out;
 	}
 	
-	public Double[] getTRSummary(int transacID) {
-		ArrayList<Double> res = new ArrayList<Double>();
+	public double[] getTRSummary(int transacID) {
+		double[] res = new double[3];
+		String q = "SELECT * "
+				+ "FROM transactions WHERE transac_id="+transacID;
+		try {
+			rs = stmt.executeQuery(q);
+			rs.next();
+			res[0] = rs.getDouble("total_price");
+			res[1] = rs.getDouble("payment");
+			res[2] = rs.getDouble("change");
+		} catch (SQLException e) {
+			return null;
+		}
+		return res;
+	}
+	
+	public String[] getTicketDetailsTR(int transacID, String eventName) {
+		String[] res = null;
+		ArrayList<String> r = new ArrayList<String>();
+		String q= "SELECT ticket_type, ticket_price, quantity, ticket_price*quantity as total "
+					+ "FROM transactions a JOIN tickets b ON a.ticket_id=b.ticket_id "
+					+ "JOIN events e ON e.event_id=b.event_id "
+					+ "WHERE transac_id="+transacID+" AND event_name='"+eventName+"'";
+		try {
+			rs = stmt.executeQuery(q);
+			while(rs.next()) {
+				r.add(rs.getString("ticket_type"));
+				r.add(Double.toString(rs.getDouble("ticket_price")));
+				r.add(Integer.toString(rs.getInt("quantity")));
+				r.add(Double.toString(rs.getDouble("total")));
+			}
+			res = new String[r.size()];
+			for (int i = 0; i < res.length; i++) {
+				res[i] = r.get(i);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public String getTRDate(int transacID) {
+		try {
+			rs = stmt.executeQuery("SELECT date_of_purchase FROM transactions WHERE transac_id="+transacID);
+			rs.next();
+			return rs.getString("date_of_purchase");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
-		return (Double[]) res.toArray();
 	}
 	
 
