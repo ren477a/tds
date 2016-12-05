@@ -3,13 +3,14 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class TellerFrame extends JFrame {
 		private JList<String> listCart;
 		private DefaultListModel<String> mdlCart;
 		private JLabel lblSelTickets, lblCart, lblT, lblTotal, lblCashPay;
 		private JTextField tfCash;
-		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit, btnLogout;
+		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit, btnLogout, btnIR;
 		private Database db;
 		private JTable tblTickets;
 		private final String[] tblTktCols = {"ID", "Type", "Event", "Available", "Price"};;
@@ -61,12 +62,15 @@ public class TellerFrame extends JFrame {
 			btnSubmit.addActionListener(btnL);
 			btnLogout = new JButton("Logout");
 			btnLogout.addActionListener(btnL);
+			btnIR = new JButton("Inventory Report");
+			btnIR.addActionListener(btnL);
 			
 			
 			JPanel pnlBtnLeft = new JPanel(new FlowLayout());
 			pnlBtnLeft.setAlignmentX(Component.LEFT_ALIGNMENT);
 			pnlBtnLeft.add(btnAdd);
 			pnlBtnLeft.add(btnViewMore);
+			pnlBtnLeft.add(btnIR);
 			JPanel pnlTop = new JPanel();
 			pnlTop.setLayout(new BoxLayout(pnlTop, BoxLayout.PAGE_AXIS));
 			pnlTop.setBorder(new EmptyBorder(20,20,20,20));
@@ -154,10 +158,17 @@ public class TellerFrame extends JFrame {
 					} catch (NumberFormatException e) {
 						
 					}
-				}	else if(ae.getSource().equals(btnLogout)) {
+				} else if(ae.getSource().equals(btnLogout)) {
 					TellerFrame.this.setVisible(false);
 					main.setVisible(true);
 					main.clear();
+				} else if(ae.getSource().equals(btnIR)) {
+					Reports r = new Reports();
+					String res = r.generateIR();
+					if(res!=null) {
+						JOptionPane.showMessageDialog(null, "Inventory report generation successful.\nView report on:\n"+res);
+						
+					}
 				}
 			}
 		}

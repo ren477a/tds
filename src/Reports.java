@@ -9,7 +9,7 @@ public class Reports {
 	}
 	
 	//generate transaction report
-	public boolean generateTR(int id) {
+	public String generateTR(int id) {
 		File temp = new File("templates/transaction.html");
 		int trNumber = id;
 		String html="";
@@ -92,15 +92,15 @@ public class Reports {
 	        output = new BufferedWriter(new FileWriter(outFileName));
 	        output.write(html);
 	        output.close();
-			return true;
+			return outFileName;
 	    } catch (IOException ex) {
 	    	System.out.println("File IO Error opening " + outFileName);
 	    	ex.printStackTrace();
-	    	return false;
+	    	return null;
 	    }	    
 	}
 	
-	public boolean generateIR() {
+	public String generateIR() {
 		File temp = new File("templates/inventory.html");
 		String html="";
 		try {
@@ -146,11 +146,11 @@ public class Reports {
 	        output = new BufferedWriter(new FileWriter(outFileName));
 	        output.write(html);
 	        output.close();
-			return true;
+			return outFileName;
 	    } catch (IOException ex) {
 	    	System.out.println("File IO Error opening " + outFileName);
 	    	ex.printStackTrace();
-	    	return false;
+	    	return null;
 	    }	    
 	}
 }

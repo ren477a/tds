@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AdminFrame extends JFrame {
-	private JButton btnAdd, btnRemove, btnEdit, btnLoad, btnLogout;
+	private JButton btnAdd, btnRemove, btnEdit, btnLoad, btnLogout, btnTR;
 	private JTable table;
 	private ButtonListener btnL;
 	private final String eventsQ = "SELECT * FROM events";
@@ -44,6 +44,8 @@ public class AdminFrame extends JFrame {
 		btnEdit.addActionListener(btnL);
 		btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(btnL);
+		btnTR = new JButton("Transaction Report");
+		btnTR.addActionListener(btnL);
 		JPanel pnlBtns = new JPanel(new FlowLayout());
 		pnlBtns.add(btnAdd);
 		pnlBtns.add(btnRemove);
@@ -55,6 +57,7 @@ public class AdminFrame extends JFrame {
 		pnlTop.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pnlTop.add(cb);
 		pnlTop.add(btnLoad);
+		pnlTop.add(btnTR);
 		
 		JPanel pnlBody = new JPanel();
 		pnlBody.setLayout(new BoxLayout(pnlBody, BoxLayout.PAGE_AXIS));
@@ -179,6 +182,22 @@ public class AdminFrame extends JFrame {
 				AdminFrame.this.setVisible(false);
 				main.setVisible(true);
 				main.clear();
+			} else if(ae.getSource().equals(btnTR)) {
+				Reports r = new Reports();
+				int in;
+				try {
+					in = Integer.parseInt(JOptionPane.showInputDialog("Generate transaction report for TR#"));				
+					String res = r.generateTR(in);
+					if(res!=null) {
+						JOptionPane.showMessageDialog(null, "Inventory report generation successful.\nView report on:\n"+res);
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid");
+				} catch (HeadlessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 		}
 	}

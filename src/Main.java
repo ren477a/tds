@@ -76,7 +76,9 @@ public class Main extends JFrame{
 				} else {
 					JOptionPane.showMessageDialog(null, "Login failed!");
 				}
-			}
+			}else if(ae.getSource().equals(btnExit)) {
+				System.exit(0);
+			} 
 		}
 	}
 	
@@ -88,7 +90,7 @@ public class Main extends JFrame{
 	public static void createShowGUI() {
 		Main app = new Main();
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		app.setTitle("Ticket Master");
+		app.setTitle("Ticket Distribution System");
 		app.setSize(400, 400);
 		app.setLocationRelativeTo(null);
 		app.setVisible(true);
