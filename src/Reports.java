@@ -1,6 +1,7 @@
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 public class Reports {
 	
@@ -125,9 +126,20 @@ public class Reports {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(html);
 		Database db = new Database();
 		StringBuilder sb = new StringBuilder();
+		html = html.replaceAll("[$]aTickets", db.getAvailableItems(true));
+		html = html.replaceAll("[$]soTickets", db.getAvailableItems(false));
+		System.out.println(html);
+		
+		//all transactions where transaction date > currDate-24hours;
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -1);
+		Date date = cal.getTime();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(dateFormat.format(date));
+		
+		
 //		for (int i = 0; i < events.length; i++) {
 //			sb.append("<h3>Event Name: "+events[i]+"</h3>");
 //			sb.append(System.getProperty("line.separator"));

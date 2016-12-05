@@ -357,8 +357,69 @@ public class Database {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
-
+	//inventory reports
+	public String getAvailableItems(boolean isAvailable) {
+		String out = "";
+		StringBuilder sb = new StringBuilder();
+		String q;
+		if(isAvailable) {
+			q = "SELECT ticket_id, event_name, ticket_type, ticket_price, ticket_stock"
+					+ " FROM tickets t JOIN events e ON t.event_id=e.event_id "
+					+ "WHERE ticket_stock>0";
+		} else {
+			q = "SELECT ticket_id, event_name, ticket_type, ticket_price, ticket_stock"
+					+ " FROM tickets t JOIN events e ON t.event_id=e.event_id "
+					+ "WHERE ticket_stock=0";
+		}
+		sb.append("<table align='center' border='1'>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<tr>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Ticket ID</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Event</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Type</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Price</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Stock</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("</tr>");
+		sb.append(System.getProperty("line.separator"));
+		try {
+			rs = stmt.executeQuery(q);
+			while(rs.next()) {
+				sb.append("<tr>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getInt("ticket_id")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getString("event_name")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getString("ticket_type")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getDouble("ticket_price")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getInt("ticket_stock")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("</tr>");
+				sb.append(System.getProperty("line.separator"));
+			}
+		} catch (SQLException e) {
+			return "";
+		}
+		sb.append("</table>");
+		
+		return sb.toString();
+	}
+	
+	public String getTransactionsWithinTheLastDay(String d) {
+		StringBuilder sb = new StringBuilder();
+		
+		
+		return sb.toString();
+	}
+	
 }
