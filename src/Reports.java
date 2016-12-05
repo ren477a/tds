@@ -130,75 +130,27 @@ public class Reports {
 		StringBuilder sb = new StringBuilder();
 		html = html.replaceAll("[$]aTickets", db.getAvailableItems(true));
 		html = html.replaceAll("[$]soTickets", db.getAvailableItems(false));
-		System.out.println(html);
 		
 		//all transactions where transaction date > currDate-24hours;
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -1);
 		Date date = cal.getTime();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		System.out.println(dateFormat.format(date));
-		
-		
-//		for (int i = 0; i < events.length; i++) {
-//			sb.append("<h3>Event Name: "+events[i]+"</h3>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<table border='1' align='center'>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<tr>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<td>Ticket Type</td>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<td>Ticket Price</td>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<td>Quantity</td>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("<td>Total</td>");
-//			sb.append(System.getProperty("line.separator"));
-//			sb.append("</tr>");
-//			sb.append(System.getProperty("line.separator"));
-//			String[] out = db.getTicketDetailsTR(id, events[i]);
-//			for (int j = 0; j < out.length; j+=4) {
-//				sb.append("<tr>");
-//				sb.append(System.getProperty("line.separator"));
-//				sb.append("<td>"+out[j]+"</td>");
-//				sb.append(System.getProperty("line.separator"));
-//				sb.append("<td>"+out[j+1]+"</td>");
-//				sb.append(System.getProperty("line.separator"));
-//				sb.append("<td>"+out[j+2]+"</td>");
-//				sb.append(System.getProperty("line.separator"));
-//				sb.append("<td>"+out[j+3]+"</td>");
-//				sb.append(System.getProperty("line.separator"));
-//				sb.append("</tr>");
-//			}
-//			sb.append("</table>");
-//			sb.append(System.getProperty("line.separator"));
-//		}
-//		String table = sb.toString();
-//		
-//		double[] summary = db.getTRSummary(id);
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-//		Date date = new Date();
-//		html = html.replaceAll("[$]table", table);
-//		html = html.replaceAll("[$]trNum", Integer.toString(trNumber));
-//		html = html.replaceAll("[$]grandTotal", Double.toString(summary[0]));
-//		html = html.replaceAll("[$]cash", Double.toString(summary[1]));
-//		html = html.replaceAll("[$]change", Double.toString(summary[2]));
-//		html = html.replaceAll("[$]currDate", dateFormat.format(date));
-//		html = html.replaceAll("[$]trDate", db.getTRDate(id));
-
-//		BufferedWriter output;
-//		String outFileName = "reports/asd.html";
-//		try {
-//	        output = new BufferedWriter(new FileWriter(outFileName));
-//	        output.write(html);
-//	        output.close();
-//			return true;
-//	    } catch (IOException ex) {
-//	    	System.out.println("File IO Error opening " + outFileName);
-//	    	ex.printStackTrace();
-//	    	return false;
-//	    }	    
-		return true;
+		String d = dateFormat.format(date);
+		html = html.replaceAll("[$]last", db.getTransactionsWithinTheLastDay(d));
+		html = html.replaceAll("[$]currDate", d);
+		BufferedWriter output;
+		DateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
+		String outFileName = "reports/IR"+df.format(date)+".html";
+		try {
+	        output = new BufferedWriter(new FileWriter(outFileName));
+	        output.write(html);
+	        output.close();
+			return true;
+	    } catch (IOException ex) {
+	    	System.out.println("File IO Error opening " + outFileName);
+	    	ex.printStackTrace();
+	    	return false;
+	    }	    
 	}
 }

@@ -9,7 +9,7 @@ public class TellerFrame extends JFrame {
 		private DefaultListModel<String> mdlCart;
 		private JLabel lblSelTickets, lblCart, lblT, lblTotal, lblCashPay;
 		private JTextField tfCash;
-		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit;
+		private JButton btnViewMore, btnAdd, btnRemove, btnSubmit, btnLogout;
 		private Database db;
 		private JTable tblTickets;
 		private final String[] tblTktCols = {"ID", "Type", "Event", "Available", "Price"};;
@@ -20,10 +20,11 @@ public class TellerFrame extends JFrame {
 				+"ON tickets.event_id=events.event_id "
 				+"ORDER BY tickets.event_id, tickets.ticket_price DESC";
 		private ButtonListener btnL;
-		
+		private Main main;
 		private Cart cart;
 		
-		public TellerFrame(Database db) {
+		public TellerFrame(Database db, Main main) {
+			this.main = main;
 			cart = new Cart();
 			this.db = db;
 			btnL = new ButtonListener();
@@ -58,6 +59,8 @@ public class TellerFrame extends JFrame {
 			btnRemove.addActionListener(btnL);
 			btnSubmit = new JButton("Submit");
 			btnSubmit.addActionListener(btnL);
+			btnLogout = new JButton("Logout");
+			btnLogout.addActionListener(btnL);
 			
 			
 			JPanel pnlBtnLeft = new JPanel(new FlowLayout());
@@ -77,6 +80,7 @@ public class TellerFrame extends JFrame {
 			pnlBtnRight.setAlignmentX(Component.CENTER_ALIGNMENT);
 			pnlBtnRight.add(btnRemove);
 			pnlBtnRight.add(btnSubmit);
+			pnlBtnRight.add(btnLogout);
 			JPanel pnlBtm = new JPanel();
 			pnlBtm.setAlignmentX(Component.LEFT_ALIGNMENT);
 			pnlBtm.setLayout(new BoxLayout(pnlBtm, BoxLayout.PAGE_AXIS));
@@ -150,6 +154,10 @@ public class TellerFrame extends JFrame {
 					} catch (NumberFormatException e) {
 						
 					}
+				}	else if(ae.getSource().equals(btnLogout)) {
+					TellerFrame.this.setVisible(false);
+					main.setVisible(true);
+					main.clear();
 				}
 			}
 		}

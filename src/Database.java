@@ -361,7 +361,6 @@ public class Database {
 	
 	//inventory reports
 	public String getAvailableItems(boolean isAvailable) {
-		String out = "";
 		StringBuilder sb = new StringBuilder();
 		String q;
 		if(isAvailable) {
@@ -417,7 +416,44 @@ public class Database {
 	
 	public String getTransactionsWithinTheLastDay(String d) {
 		StringBuilder sb = new StringBuilder();
-		
+		String q = "SELECT transac_id, ticket_type, event_name, quantity "
+				+ "FROM transactions t  JOIN tickets i ON t.ticket_id=i.ticket_id "
+				+ "JOIN events e ON e.event_id=i.event_id "
+				+ "WHERE date_of_purchase>'"+d+"'";
+		sb.append("<table align='center' border='1'>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<tr>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>TR#</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Ticket</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Event</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("<td>Quantity Sold</td>");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("</tr>");
+		sb.append(System.getProperty("line.separator"));
+		try {
+			rs = stmt.executeQuery(q);
+			while(rs.next()) {
+				sb.append("<tr>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getInt("transac_id")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getString("ticket_type")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getString("event_name")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("<td>"+rs.getInt("quantity")+"</td>");
+				sb.append(System.getProperty("line.separator"));
+				sb.append("</tr>");
+				sb.append(System.getProperty("line.separator"));
+			}
+		} catch (SQLException e) {
+			return "";
+		}
+		sb.append("</table>");
 		
 		return sb.toString();
 	}

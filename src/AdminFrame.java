@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class AdminFrame extends JFrame {
-	private JButton btnAdd, btnRemove, btnEdit, btnLoad;
+	private JButton btnAdd, btnRemove, btnEdit, btnLoad, btnLogout;
 	private JTable table;
 	private ButtonListener btnL;
 	private final String eventsQ = "SELECT * FROM events";
@@ -16,14 +16,15 @@ public class AdminFrame extends JFrame {
 	private final String[] transactionsC = {"ID", "Transaction #", "Date of Purchase", "Ticket ID", "Quantity", "Total", "Cash", "Change"};
 	private JComboBox<String> cb;
 	private Database db;
-	
+	private Main main;
 	private enum State {
 		EVENTS, TICKETS, TRANSACTIONS
 	}
 	
 	State state;
 	
-	public AdminFrame(Database db) {
+	public AdminFrame(Database db, Main main) {
+		this.main = main;
 		state = State.EVENTS;
 		this.db = db;
 		table = db.createTable(eventsQ, eventsC);
@@ -41,10 +42,13 @@ public class AdminFrame extends JFrame {
 		btnRemove.addActionListener(btnL);
 		btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(btnL);
+		btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(btnL);
 		JPanel pnlBtns = new JPanel(new FlowLayout());
 		pnlBtns.add(btnAdd);
 		pnlBtns.add(btnRemove);
 		pnlBtns.add(btnEdit);
+		pnlBtns.add(btnLogout);
 		pnlBtns.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JPanel pnlTop = new JPanel(new FlowLayout());
@@ -171,6 +175,10 @@ public class AdminFrame extends JFrame {
 					btnRemove.setEnabled(true);
 					btnEdit.setEnabled(true);
 				}
+			} else if(ae.getSource().equals(btnLogout)) {
+				AdminFrame.this.setVisible(false);
+				main.setVisible(true);
+				main.clear();
 			}
 		}
 	}

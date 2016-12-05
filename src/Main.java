@@ -62,19 +62,27 @@ public class Main extends JFrame{
 			if(ae.getSource().equals(btnTeller)) {
 				String pass = new String(tfPass.getPassword());
 				if(tfUser.getText().equals(userTeller) && pass.equals(passTeller)) {
-					TellerFrame tf = new TellerFrame(db);
+					TellerFrame tf = new TellerFrame(db, Main.this);
 					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Login failed!");
 				}
 				
 			} else if(ae.getSource().equals(btnAdmin)) {
 				String pass = new String(tfPass.getPassword());
 				if(tfUser.getText().equals(userAdmin) && pass.equals(passAdmin)) {
-					AdminFrame af = new AdminFrame(db);
+					AdminFrame af = new AdminFrame(db, Main.this);
 					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Login failed!");
 				}
-				setVisible(false);
 			}
 		}
+	}
+	
+	public void clear() {
+		tfUser.setText("");
+		tfPass.setText("");
 	}
 	
 	public static void createShowGUI() {
@@ -88,13 +96,12 @@ public class Main extends JFrame{
 	
 	
 
-//	public static void main(String[] args) {
-//		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                createShowGUI();
-//            }
-//        });
-//
-//	}
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createShowGUI();
+            }
+        });
+	}
 
 }
